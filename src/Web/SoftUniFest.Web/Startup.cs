@@ -1,7 +1,11 @@
 ﻿namespace SoftUniFest.Web
 {
+    using System;
     using System.Reflection;
-
+    using Hangfire;
+    using Hangfire.Console;
+    using Hangfire.Dashboard;
+    using Hangfire.SqlServer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -10,12 +14,14 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using SoftUniFest.Common;
     using SoftUniFest.Data;
     using SoftUniFest.Data.Common;
     using SoftUniFest.Data.Common.Repositories;
     using SoftUniFest.Data.Models;
     using SoftUniFest.Data.Repositories;
     using SoftUniFest.Data.Seeding;
+    using SoftUniFest.Services.CronJobs;
     using SoftUniFest.Services.Mapping;
     using SoftUniFest.Services.Messaging;
     using SoftUniFest.Web.ViewModels;
@@ -36,6 +42,20 @@
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext2>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("SecondConnection")));
+
+            services.AddHangfire(
+                config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings().UseSqlServerStorage(
+                        this.configuration.GetConnectionString("DefaultConnection"),
+                        new SqlServerStorageOptions
+                        {
+                            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                            QueuePollInterval = TimeSpan.Zero,
+                            UseRecommendedIsolationLevel = true,
+                            UsePageLocksOnDequeue = true,
+                            DisableGlobalLocks = true,
+                        }).UseConsole());
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -72,7 +92,8 @@
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        [Obsolete]
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager)
         {
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
@@ -82,6 +103,7 @@
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+                SeedHangfireJobs(recurringJobManager);
             }
 
             if (env.IsDevelopment())
@@ -104,6 +126,10 @@
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseHangfireServer(new BackgroundJobServerOptions { WorkerCount = 2 });
+            app.UseHangfireDashboard(
+                    "/hangfire");
+
             app.UseEndpoints(
                 endpoints =>
                 {
@@ -115,6 +141,22 @@
                         "{controller=Home}/{action=Index}/{id?}");
                     endpoints.MapRazorPages();
                 });
+        }
+
+        private static void SeedHangfireJobs(IRecurringJobManager recurringJobManager)
+        {
+            recurringJobManager.AddOrUpdate<TraderSync>("TraderSync", x => x.Work(), Cron.Minutely);
+            recurringJobManager.AddOrUpdate<EmployeeSync>("EmployeeSync", x => x.Work(), Cron.Minutely);
+            recurringJobManager.AddOrUpdate<PosTerminalSync>("PosTerminalSync", x => x.Work(), Cron.Minutely);
+        }
+
+        private class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
+        {
+            public bool Authorize(DashboardContext context)
+            {
+                var httpContext = context.GetHttpContext();
+                return httpContext.User.IsInRole(GlobalConstants.AdministratorRoleName);
+            }
         }
     }
 }

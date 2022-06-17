@@ -16,6 +16,8 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
+    using SoftUniFest.Common;
+    using SoftUniFest.Data;
     using SoftUniFest.Data.Models;
 
     using static SoftUniFest.Common.DataConstants;
@@ -26,17 +28,20 @@
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext dbContext;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            this.dbContext = dbContext;
         }
 
         [BindProperty]
@@ -101,6 +106,15 @@
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    var userId = user.Id;
+                    var roleId = this.dbContext.Roles.FirstOrDefault(x => x.Name == GlobalConstants.CardHolderRoleName)?.Id;
+                    await this.dbContext.UserRoles.AddAsync(new IdentityUserRole<string>
+                    {
+                        UserId = userId,
+                        RoleId = roleId,
+                    });
+                    await this.dbContext.SaveChangesAsync();
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
