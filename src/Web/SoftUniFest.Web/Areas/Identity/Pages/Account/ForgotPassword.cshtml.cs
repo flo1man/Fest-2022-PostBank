@@ -9,11 +9,11 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using SoftUniFest.Data.Models;
+using SoftUniFest.Services.Messaging;
 
 namespace SoftUniFest.Web.Areas.Identity.Pages.Account
 {
@@ -55,11 +55,12 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
-                }
+                // TODO:
+                //if (user == null)
+                //{
+                //    // Don't reveal that the user does not exist or is not confirmed
+                //    return RedirectToPage("./ForgotPasswordConfirmation");
+                //}
 
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
@@ -71,10 +72,18 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<h1>Hello,</h1>");
+                sb.Append($"<p>We've received a request to reset the password for the POS Discount account associated with {Input.Email}. No changes have been made to your account yet.</p>");
+                sb.Append("<br>");
+                sb.Append($"<p>You can reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                sb.Append("<br>");
+                sb.Append("<p>If you did not request a new password, please let us know immediately by replying to this email.</p>");
+
+                await _emailSender.SendEmailAsync("skvproject@abv.bg", "SoftUni Fest",
                     Input.Email,
                     "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    sb.ToString().Trim());
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

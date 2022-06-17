@@ -48,6 +48,11 @@
                 <span asp-validation-for="Input.ExpiredOn" class="text-danger"></span>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <div>
+                <p>
+                    <a asp-page="./RegisterTrader" asp-route-returnUrl="@Model.ReturnUrl">Register as a trader</a>
+                </p>
+            </div>
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">
