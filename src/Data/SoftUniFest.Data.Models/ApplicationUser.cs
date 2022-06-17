@@ -7,6 +7,7 @@ namespace SoftUniFest.Data.Models
     using SoftUniFest.Data.Common.Models;
 
     using Microsoft.AspNetCore.Identity;
+    using System.ComponentModel.DataAnnotations;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -28,8 +29,10 @@ namespace SoftUniFest.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
+        [Required]
         public string CreditCardNumber { get; set; }
 
+        [Required]
         public string ExpiredOn { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }

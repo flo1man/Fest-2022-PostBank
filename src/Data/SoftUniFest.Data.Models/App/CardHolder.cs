@@ -8,12 +8,14 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class CardHolder : BaseDeletableModel<string>
+    public class CardHolder
     {
         public CardHolder()
         {
             this.Id = Guid.NewGuid().ToString();
         }
+
+        public string Id { get; set; }
 
         [Required]
         public string Username { get; set; }
@@ -30,5 +32,7 @@
 
         [Required]
         public string CardNumber { get; set; }
+
+        public DateTime DateOfRegister { get; set; }
     }
 }

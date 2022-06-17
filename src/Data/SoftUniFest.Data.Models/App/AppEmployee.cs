@@ -5,12 +5,14 @@
 
     using SoftUniFest.Data.Common.Models;
 
-    public class AppEmployee : BaseDeletableModel<string>
+    public class AppEmployee
     {
         public AppEmployee()
         {
             this.Id = Guid.NewGuid().ToString();
         }
+
+        public string Id { get; set; }
 
         [Required]
         public string Username { get; set; }

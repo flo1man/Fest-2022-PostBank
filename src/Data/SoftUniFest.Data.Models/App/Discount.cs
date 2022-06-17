@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace SoftUniFest.Data.Models.App
 {
-    public class Discount : BaseDeletableModel<string>
+    public class Discount
     {
         public Discount()
         {
             this.Id = Guid.NewGuid().ToString();
         }
+
+        public string Id { get; set; }
 
         public string TraderId { get; set; }
 

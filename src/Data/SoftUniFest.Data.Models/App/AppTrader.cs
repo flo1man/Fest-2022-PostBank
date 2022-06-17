@@ -6,7 +6,7 @@
 
     using SoftUniFest.Data.Common.Models;
 
-    public class AppTrader : BaseDeletableModel<string>
+    public class AppTrader
     {
         public AppTrader()
         {
@@ -14,6 +14,8 @@
             this.Discounts = new HashSet<Discount>();
             this.PosTerminals = new HashSet<AppPosTerminal>();
         }
+
+        public string Id { get; set; }
 
         [Required]
         public string Username { get; set; }
@@ -27,6 +29,8 @@
 
         [Required]
         public string PhoneNumber { get; set; }
+
+        public DateTime DateOfRegister { get; set; }
 
         public ICollection<Discount> Discounts { get; set; }
 
