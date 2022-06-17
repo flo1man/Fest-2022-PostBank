@@ -1,4 +1,4 @@
-﻿namespace SoftUniFest.Data.Models
+﻿namespace SoftUniFest.Data.Models.App
 {
     using System;
     using System.Collections.Generic;
@@ -6,12 +6,13 @@
 
     using SoftUniFest.Data.Common.Models;
 
-    public class Trader : BaseDeletableModel<string>
+    public class AppTrader : BaseDeletableModel<string>
     {
-        public Trader()
+        public AppTrader()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.POSTerminals = new HashSet<POSTerminal>();
+            this.Discounts = new HashSet<Discount>();
+            this.PosTerminals = new HashSet<AppPosTerminal>();
         }
 
         [Required]
@@ -27,6 +28,8 @@
         [Required]
         public string PhoneNumber { get; set; }
 
-        public virtual ICollection<POSTerminal> POSTerminals { get; set; }
+        public ICollection<Discount> Discounts { get; set; }
+
+        public ICollection<AppPosTerminal> PosTerminals { get; set; }
     }
 }

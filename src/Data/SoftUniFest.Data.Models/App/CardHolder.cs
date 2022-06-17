@@ -1,17 +1,18 @@
-﻿namespace SoftUniFest.Data.Models
+﻿namespace SoftUniFest.Data.Models.App
 {
+    using SoftUniFest.Data.Common.Models;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
-    using SoftUniFest.Data.Common.Models;
-
-    public class Trader : BaseDeletableModel<string>
+    public class CardHolder : BaseDeletableModel<string>
     {
-        public Trader()
+        public CardHolder()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.POSTerminals = new HashSet<POSTerminal>();
         }
 
         [Required]
@@ -27,6 +28,7 @@
         [Required]
         public string PhoneNumber { get; set; }
 
-        public virtual ICollection<POSTerminal> POSTerminals { get; set; }
+        [Required]
+        public string CardNumber { get; set; }
     }
 }

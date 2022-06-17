@@ -13,8 +13,8 @@
         }
 
         [Required]
-        public string EmployeeId { get; set; }
+        public string TraderId { get; set; }
 
-        public virtual Employee Employee { get; set; }
+        public virtual Trader Trader { get; set; }
     }
 }

@@ -1,14 +1,13 @@
-﻿namespace SoftUniFest.Data.Models
+﻿namespace SoftUniFest.Data.Models.App
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using SoftUniFest.Data.Common.Models;
 
-    public class Employee : BaseDeletableModel<string>
+    public class AppEmployee : BaseDeletableModel<string>
     {
-        public Employee()
+        public AppEmployee()
         {
             this.Id = Guid.NewGuid().ToString();
         }
@@ -22,6 +21,5 @@
 
         [Required]
         public string Password { get; set; }
-
     }
 }
