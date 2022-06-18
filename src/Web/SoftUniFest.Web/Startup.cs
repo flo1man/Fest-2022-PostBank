@@ -156,7 +156,7 @@
             //recurringJobManager.AddOrUpdate<TraderSync>("TraderSync", x => x.Work(), Cron.Minutely);
             recurringJobManager.AddOrUpdate<EmployeeSync>("EmployeeSync", x => x.Work(), Cron.Minutely);
             recurringJobManager.AddOrUpdate<PosTerminalSync>("PosTerminalSync", x => x.Work(), Cron.Minutely);
-            recurringJobManager.AddOrUpdate<NotificationSend>("NotificationSend", x => x.Work(), "30 7 * * wed");
+            recurringJobManager.AddOrUpdate<NotificationSend>("NotificationSend", x => x.Work(), "30 7 * * wed"); // “At 07:30 on Wednesday.”
         }
 
         private class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
