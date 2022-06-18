@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\SoftUniFest.Data.Models\SoftUniFest.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\SoftUniFest.Services.Mapping\SoftUniFest.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\SoftUniFest.Common\SoftUniFest.Common.csproj" />
   </ItemGroup>
 
 </Project>

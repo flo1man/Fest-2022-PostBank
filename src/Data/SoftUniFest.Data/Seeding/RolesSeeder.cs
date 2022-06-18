@@ -4,11 +4,10 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using SoftUniFest.Common;
-    using SoftUniFest.Data.Models;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
+    using SoftUniFest.Common;
+    using SoftUniFest.Data.Models;
 
     internal class RolesSeeder : ISeeder
     {
@@ -19,6 +18,7 @@
             await SeedRoleAsync(roleManager, GlobalConstants.AdministratorRoleName);
             await SeedRoleAsync(roleManager, GlobalConstants.TraderRoleName);
             await SeedRoleAsync(roleManager, GlobalConstants.CardHolderRoleName);
+            await SeedRoleAsync(roleManager, GlobalConstants.EmployeeRoleName);
         }
 
         private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)

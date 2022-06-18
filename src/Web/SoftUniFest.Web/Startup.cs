@@ -22,6 +22,7 @@
     using SoftUniFest.Data.Repositories;
     using SoftUniFest.Data.Seeding;
     using SoftUniFest.Services.CronJobs;
+    using SoftUniFest.Services.Data;
     using SoftUniFest.Services.Mapping;
     using SoftUniFest.Services.Messaging;
     using SoftUniFest.Web.ViewModels;
@@ -89,6 +90,8 @@
             // Application services
             services.AddTransient<IEmailSender>(
                 x => new SendGridEmailSender(this.configuration["SendGrid:ApiKey"]));
+            services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<ITraderService, TraderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

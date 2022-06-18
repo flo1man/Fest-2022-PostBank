@@ -9,5 +9,7 @@
         public const string TraderRoleName = "Trader";
 
         public const string CardHolderRoleName = "CardHolder";
+
+        public const string EmployeeRoleName = "Employee";
     }
 }

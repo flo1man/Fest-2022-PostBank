@@ -86,7 +86,7 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var userName = Guid.NewGuid().ToString();
-                var password = Guid.NewGuid().ToString() + "@S";
+                var password = "Admin123@";//Guid.NewGuid().ToString() + "@S";
                 var user = new ApplicationUser { UserName = userName, Email = Input.Email, PhoneNumber = Input.PhoneNumber, CreditCardNumber = Input.CreditCardNumber, ExpiredOn = Input.ExpiredOn };
                 var result = await _userManager.CreateAsync(user, password);
                 if (result.Succeeded)
