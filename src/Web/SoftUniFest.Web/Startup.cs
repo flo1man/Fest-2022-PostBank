@@ -2,6 +2,8 @@
 {
     using System;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Hangfire;
     using Hangfire.Console;
     using Hangfire.Dashboard;
@@ -92,6 +94,7 @@
                 x => new SendGridEmailSender(this.configuration["SendGrid:ApiKey"]));
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ITraderService, TraderService>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -148,9 +151,12 @@
 
         private static void SeedHangfireJobs(IRecurringJobManager recurringJobManager)
         {
-            recurringJobManager.AddOrUpdate<TraderSync>("TraderSync", x => x.Work(), Cron.Minutely);
+            recurringJobManager.AddOrUpdate<ApplicationSync>("UsersSync", x => x.Work(), Cron.Minutely);
+            Thread.Sleep(10);
+            //recurringJobManager.AddOrUpdate<TraderSync>("TraderSync", x => x.Work(), Cron.Minutely);
             recurringJobManager.AddOrUpdate<EmployeeSync>("EmployeeSync", x => x.Work(), Cron.Minutely);
             recurringJobManager.AddOrUpdate<PosTerminalSync>("PosTerminalSync", x => x.Work(), Cron.Minutely);
+            recurringJobManager.AddOrUpdate<NotificationSend>("NotificationSend", x => x.Work(), "30 7 * * wed");
         }
 
         private class HangfireAuthorizationFilter : IDashboardAuthorizationFilter

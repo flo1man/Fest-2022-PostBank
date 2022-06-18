@@ -26,8 +26,6 @@
 
         public DbSet<Setting> Settings { get; set; }
 
-        public DbSet<Trader> Traders { get; set; }
-
         public DbSet<Employee> Employees { get; set; }
 
         public DbSet<POSTerminal> POSTerminals { get; set; }

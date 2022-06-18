@@ -19,6 +19,7 @@
 
         public EmployeeSync(IDbQueryRunner queryRunner,
             IDeletableEntityRepository<Employee> employeeRepository,
+            ApplicationDbContext dwhContext,
             ApplicationDbContext2 dbContext)
         {
             this.queryRunner = queryRunner;

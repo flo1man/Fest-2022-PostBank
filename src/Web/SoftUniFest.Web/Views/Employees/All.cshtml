@@ -1,6 +1,79 @@
-﻿namespace SoftUniFest.Web.Views.Employees
-{
-    public class All
-    {
-    }
+﻿@using SoftUniFest.Data.Models.App
+@model SoftUniFest.Web.ViewModels.Discounts.EmployeeDiscountListViewModel
+
+<form method="post">
+<input value="Turn ON" type="submit" asp-controller="Notification" asp-action="Notify" asp-route-id="1" class="btn btn-primary @if (Model.IsTurnOn) { <text>disabled</text> }" />
+<input value="Turn OFF" type="submit" asp-controller="Notification" asp-action="Notify" asp-route-id="1" class="btn btn-danger @if (!Model.IsTurnOn) { <text>disabled</text> }" />
+</form>
+
+
+<table id="myTable" class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Trader Username</th>
+            <th scope="col">Percentage (%)</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.Discounts)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Trader.Username</td>
+                <td>@item.Percentage</td>
+                <td>@item.StartDate</td>
+                <td>@item.EndDate</td>
+                <td>@item.Status.ToString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+    @*<script>
+        const toggle = document.querySelector('.toggle input')
+
+        toggle.addEventListener('click', () => {
+            const onOff = toggle.parentNode.querySelector('.onoff')
+            onOff.textContent = toggle.checked ? 'ON' : 'OFF';
+            if (onOff.textContent == 'ON') {
+                function addFavorite() {
+                    var json = { isNotifyOn: true };
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/notification",
+                        data: JSON.stringify(json),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        headers: { 'X-CSRF-TOKEN': token },
+                        success: console.log('ON')
+                    });
+                }
+            }
+            else {
+                function addFavorite() {
+                    var json = { isNotifyOn: false };
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/notification",
+                        data: JSON.stringify(json),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        headers: { 'X-CSRF-TOKEN': token },
+                        success: console.log('OFF')
+                    });
+                }
+            }
+        })
+    </script>*@
 }

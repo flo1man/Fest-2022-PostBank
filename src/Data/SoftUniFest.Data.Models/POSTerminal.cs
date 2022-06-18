@@ -15,6 +15,6 @@
         [Required]
         public string TraderId { get; set; }
 
-        public virtual Trader Trader { get; set; }
+        public virtual ApplicationUser Trader { get; set; }
     }
 }

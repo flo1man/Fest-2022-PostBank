@@ -28,7 +28,9 @@
             await queryRunner.RunQueryAsync(
                 $"DELETE FROM [SoftUniFest2].[dbo].[Traders]");
 
-            var traders = this.userRepository.All().ToList();
+            var traders = this.userRepository.All()
+                .Where(x => x.Roles.Any(x => x.RoleId == "b75c8fc1-fb06-4774-bba7-416cb0433477"))
+                .ToList();
 
             foreach (var trader in traders)
             {

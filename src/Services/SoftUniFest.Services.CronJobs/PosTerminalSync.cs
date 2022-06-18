@@ -31,14 +31,14 @@
             await queryRunner.RunQueryAsync(
                 $"TRUNCATE TABLE [SoftUniFest2].[dbo].[PosTerminals]");
 
-            var traders = this.terminalRepository.All().ToList();
+            var terminals = this.terminalRepository.All().ToList();
 
-            foreach (var trader in traders)
+            foreach (var terminal in terminals)
             {
                 await dbContext.PosTerminals.AddAsync(new AppPosTerminal
                 {
-                    Id = trader.Id,
-                    TraderId = trader.TraderId,
+                    Id = terminal.Id,
+                    TraderId = terminal.TraderId,
                 });
             }
 

@@ -17,6 +17,7 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
     using Microsoft.Extensions.Logging;
     using SoftUniFest.Common;
     using SoftUniFest.Data;
+    using SoftUniFest.Data.Common.Repositories;
     using SoftUniFest.Data.Models;
     using SoftUniFest.Services.Messaging;
     using static SoftUniFest.Common.DataConstants;
@@ -28,19 +29,22 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext dbContext;
+        private readonly IDeletableEntityRepository<POSTerminal> posTerminalRepository;
 
         public RegisterTraderModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ApplicationDbContext dbContext)
+            ApplicationDbContext dbContext,
+            IDeletableEntityRepository<POSTerminal> posTerminalRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             this.dbContext = dbContext;
+            this.posTerminalRepository = posTerminalRepository;
         }
 
         [BindProperty]
@@ -85,8 +89,8 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var userName = Guid.NewGuid().ToString();
-                var password = "Admin123@";//Guid.NewGuid().ToString() + "@S";
+                var userName = "trader_" + Guid.NewGuid().ToString().Substring(0, 8);
+                var password = Guid.NewGuid().ToString() + "@S";
                 var user = new ApplicationUser { UserName = userName, Email = Input.Email, PhoneNumber = Input.PhoneNumber, CreditCardNumber = Input.CreditCardNumber, ExpiredOn = Input.ExpiredOn };
                 var result = await _userManager.CreateAsync(user, password);
                 if (result.Succeeded)
@@ -98,7 +102,12 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
                         UserId = userId,
                         RoleId = roleId,
                     });
-                    await this.dbContext.SaveChangesAsync();
+                    await dbContext.SaveChangesAsync();
+                    await this.posTerminalRepository.AddAsync(new POSTerminal
+                    {
+                        TraderId = userId,
+                    });
+                    await this.posTerminalRepository.SaveChangesAsync();
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

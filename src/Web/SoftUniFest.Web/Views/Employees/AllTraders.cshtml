@@ -1,0 +1,39 @@
+﻿@using SoftUniFest.Data.Models.App
+@model SoftUniFest.Web.ViewModels.Traders.TraderListViewModel
+
+<table id="myTable" class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Trader Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Date Of Register</th>
+            <th scope="col">PhoneNumber</th>
+            <th scope="col">Count of POS Terminal</th>
+            <th scope="col">Count of Discounts</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.Traders)
+        {
+            <tr>
+                <td>@item.Username</td>
+                <td>@item.Email</td>
+                <td>@item.DateOfRegister</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.PosTerminals.Count</td>
+                <td>@item.Discounts.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+}
+
