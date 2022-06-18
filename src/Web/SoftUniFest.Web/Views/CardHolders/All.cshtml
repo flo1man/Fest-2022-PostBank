@@ -1,0 +1,36 @@
+﻿@using SoftUniFest.Data.Models.App
+@using SoftUniFest.Web.ViewModels.Discounts
+@model ICollection<WaitingDiscountsViewModel>
+
+<table id="myTable" class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Trader Username</th>
+            <th scope="col">Percentage (%)</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TraderUsername</td>
+                <td>@item.Percentage</td>
+                <td>@item.StartDate</td>
+                <td>@item.EndDate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+}

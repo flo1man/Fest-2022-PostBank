@@ -1,12 +1,7 @@
-﻿using SoftUniFest.Data.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SoftUniFest.Data.Models.App
+﻿namespace SoftUniFest.Data.Models.App
 {
+    using System;
+
     public class Discount
     {
         public Discount()
@@ -27,5 +22,7 @@ namespace SoftUniFest.Data.Models.App
         public DateTime EndDate { get; set; }
 
         public StatusType Status { get; set; }
+
+        public int ApproveCount { get; set; }
     }
 }

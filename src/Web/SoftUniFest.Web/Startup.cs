@@ -95,6 +95,7 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ITraderService, TraderService>();
             services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<ICardHoldersService, CardHoldersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

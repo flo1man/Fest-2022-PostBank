@@ -15,5 +15,9 @@
         TraderListViewModel GetAllTraders();
 
         TerminalListViewModel GetAllTerminals();
+
+        void RejectDiscount(string discountId);
+
+        void ApproveDiscount(string discountId);
     }
 }

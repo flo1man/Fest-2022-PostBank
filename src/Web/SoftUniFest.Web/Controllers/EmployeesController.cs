@@ -47,5 +47,21 @@
 
             return this.View(viewModel);
         }
+
+        [HttpGet]
+        public IActionResult Reject(string discountId)
+        {
+            this.employeeService.RejectDiscount(discountId);
+
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        [HttpGet]
+        public IActionResult Approve(string discountId)
+        {
+            this.employeeService.ApproveDiscount(discountId);
+
+            return this.RedirectToAction(nameof(this.All));
+        }
     }
 }

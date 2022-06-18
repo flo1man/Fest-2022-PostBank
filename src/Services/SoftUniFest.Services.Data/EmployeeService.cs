@@ -26,20 +26,20 @@
         {
             var discounts = this.dbContext.Discounts.Include(x => x.Trader).ToList();
 
-            var expiredDiscounts = discounts
-                .Where(x => x.Status != StatusType.Expired &&
-                DateTime.Compare(DateTime.Parse(x.EndDate.ToShortDateString(), CultureInfo.InvariantCulture), DateTime.Parse(DateTime.Now.ToShortDateString(), CultureInfo.InvariantCulture)) <= 0)
-                .ToList();
+            //var expiredDiscounts = discounts
+            //    .Where(x => x.Status != StatusType.Expired &&
+            //    DateTime.Compare(DateTime.Parse(x.EndDate.ToShortDateString(), CultureInfo.InvariantCulture), DateTime.Parse(DateTime.Now.ToShortDateString(), CultureInfo.InvariantCulture)) <= 0)
+            //    .ToList();
 
-            if (expiredDiscounts.Any())
-            {
-                foreach (var discount in expiredDiscounts)
-                {
-                    discount.Status = StatusType.Expired;
-                }
+            //if (expiredDiscounts.Any())
+            //{
+            //    foreach (var discount in expiredDiscounts)
+            //    {
+            //        discount.Status = StatusType.Expired;
+            //    }
 
-                await this.dbContext.SaveChangesAsync();
-            }
+            //    await this.dbContext.SaveChangesAsync();
+            //}
 
             var viewModel = new EmployeeDiscountListViewModel { Discounts = discounts };
 
@@ -74,6 +74,24 @@
             var viewModel = new TraderListViewModel { Traders = traders };
 
             return viewModel;
+        }
+
+        public void RejectDiscount(string discountId)
+        {
+            var discount = this.dbContext.Discounts.FirstOrDefault(x => x.Id == discountId);
+
+            discount.Status = StatusType.Rejected;
+            discount.ApproveCount = 0;
+            this.dbContext.SaveChanges();
+        }
+
+        public void ApproveDiscount(string discountId)
+        {
+            var discount = this.dbContext.Discounts.FirstOrDefault(x => x.Id == discountId);
+
+            discount.Status = StatusType.Active;
+            discount.ApproveCount++;
+            this.dbContext.SaveChanges();
         }
     }
 }
