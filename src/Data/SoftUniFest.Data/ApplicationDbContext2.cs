@@ -22,6 +22,8 @@
 
         public DbSet<AppTrader> Traders { get; set; }
 
+        public DbSet<ApproveDiscounts> ApproveDiscounts { get; set; }
+
         public DbSet<AppEmployee> Employees { get; set; }
 
         public DbSet<CardHolder> CardHolders { get; set; }

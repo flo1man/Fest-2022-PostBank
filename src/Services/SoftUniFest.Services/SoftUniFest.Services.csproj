@@ -18,4 +18,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\SoftUniFest.Data\SoftUniFest.Data.csproj" />
+  </ItemGroup>
+
 </Project>

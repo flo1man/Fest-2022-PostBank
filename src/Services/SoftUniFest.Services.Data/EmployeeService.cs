@@ -76,21 +76,34 @@
             return viewModel;
         }
 
-        public void RejectDiscount(string discountId)
+        public void RejectDiscount(string discountId, string userId)
         {
             var discount = this.dbContext.Discounts.FirstOrDefault(x => x.Id == discountId);
 
             discount.Status = StatusType.Rejected;
             discount.ApproveCount = 0;
+            var approvedDiscounts = this.dbContext.ApproveDiscounts.Where(x => x.DiscountId == discountId).ToList();
+
+            foreach (var discounts in approvedDiscounts)
+            {
+                this.dbContext.ApproveDiscounts.Remove(discounts);
+            }
+
             this.dbContext.SaveChanges();
         }
 
-        public void ApproveDiscount(string discountId)
+        public void ApproveDiscount(string discountId, string userId)
         {
             var discount = this.dbContext.Discounts.FirstOrDefault(x => x.Id == discountId);
 
             discount.Status = StatusType.Active;
             discount.ApproveCount++;
+            this.dbContext.ApproveDiscounts.Add(new ApproveDiscounts
+            {
+                DiscountId = discountId,
+                EmployeeId = userId,
+            });
+
             this.dbContext.SaveChanges();
         }
     }

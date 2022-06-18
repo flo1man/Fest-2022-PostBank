@@ -23,6 +23,7 @@
     using SoftUniFest.Data.Models;
     using SoftUniFest.Data.Repositories;
     using SoftUniFest.Data.Seeding;
+    using SoftUniFest.Services;
     using SoftUniFest.Services.CronJobs;
     using SoftUniFest.Services.Data;
     using SoftUniFest.Services.Mapping;
@@ -96,6 +97,7 @@
             services.AddTransient<ITraderService, TraderService>();
             services.AddTransient<IEmployeeService, EmployeeService>();
             services.AddTransient<ICardHoldersService, CardHoldersService>();
+            services.AddTransient<IApproveEmployeeService, ApproveEmployeeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

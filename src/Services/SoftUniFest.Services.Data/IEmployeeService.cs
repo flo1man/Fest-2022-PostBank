@@ -16,8 +16,8 @@
 
         TerminalListViewModel GetAllTerminals();
 
-        void RejectDiscount(string discountId);
+        void RejectDiscount(string discountId, string userId);
 
-        void ApproveDiscount(string discountId);
+        void ApproveDiscount(string discountId, string userId);
     }
 }
