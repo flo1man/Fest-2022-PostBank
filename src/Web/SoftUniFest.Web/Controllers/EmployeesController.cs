@@ -55,19 +55,19 @@
         }
 
         [HttpGet]
-        public IActionResult Reject(string discountId)
+        public async Task<IActionResult> Reject(string discountId)
         {
             var userId = this.userManager.GetUserId(this.User);
-            this.employeeService.RejectDiscount(discountId, userId);
+            await this.employeeService.RejectDiscount(discountId, userId);
 
             return this.RedirectToAction(nameof(this.All));
         }
 
         [HttpGet]
-        public IActionResult Approve(string discountId)
+        public async Task<IActionResult> Approve(string discountId)
         {
             var userId = this.userManager.GetUserId(this.User);
-            this.employeeService.ApproveDiscount(discountId, userId);
+            await this.employeeService.ApproveDiscount(discountId, userId);
 
             return this.RedirectToAction(nameof(this.All));
         }

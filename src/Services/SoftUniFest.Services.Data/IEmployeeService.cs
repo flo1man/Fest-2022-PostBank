@@ -16,8 +16,8 @@
 
         TerminalListViewModel GetAllTerminals();
 
-        void RejectDiscount(string discountId, string userId);
+        Task RejectDiscount(string discountId, string userId);
 
-        void ApproveDiscount(string discountId, string userId);
+        Task ApproveDiscount(string discountId, string userId);
     }
 }

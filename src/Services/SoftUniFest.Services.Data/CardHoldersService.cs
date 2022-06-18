@@ -23,7 +23,7 @@
         public ICollection<WaitingDiscountsViewModel> GetAll()
         {
             return this.dbContext.Discounts
-                .Where(x => x.Status == StatusType.Waiting)
+                .Where(x => x.ApproveCount == 2)
                 .To<WaitingDiscountsViewModel>()
                 .ToList();
         }

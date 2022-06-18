@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\SoftUniFest.Data.Common\SoftUniFest.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\SoftUniFest.Data\SoftUniFest.Data.csproj" />
+    <ProjectReference Include="..\SoftUniFest.Services.Messaging\SoftUniFest.Services.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

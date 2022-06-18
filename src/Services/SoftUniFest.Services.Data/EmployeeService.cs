@@ -6,9 +6,11 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using SoftUniFest.Common;
     using SoftUniFest.Data;
     using SoftUniFest.Data.Models.App;
     using SoftUniFest.Services.Mapping;
+    using SoftUniFest.Services.Messaging;
     using SoftUniFest.Web.ViewModels.Discounts;
     using SoftUniFest.Web.ViewModels.PosTerminals;
     using SoftUniFest.Web.ViewModels.Traders;
@@ -16,10 +18,14 @@
     public class EmployeeService : IEmployeeService
     {
         private readonly ApplicationDbContext2 dbContext;
+        private readonly IEmailSender emailSender;
 
-        public EmployeeService(ApplicationDbContext2 dbContext)
+        public EmployeeService(
+            ApplicationDbContext2 dbContext
+            , IEmailSender emailSender)
         {
             this.dbContext = dbContext;
+            this.emailSender = emailSender;
         }
 
         public async Task<EmployeeDiscountListViewModel> GetAll()
@@ -76,7 +82,7 @@
             return viewModel;
         }
 
-        public void RejectDiscount(string discountId, string userId)
+        public async Task RejectDiscount(string discountId, string userId)
         {
             var discount = this.dbContext.Discounts.FirstOrDefault(x => x.Id == discountId);
 
@@ -90,9 +96,18 @@
             }
 
             this.dbContext.SaveChanges();
+
+            var htmlContent = $"<h1>Your discount with ID : {discountId} is rejected!</h1>";
+
+            await this.emailSender.SendEmailAsync(
+                GlobalConstants.SiteEmail,
+                GlobalConstants.SystemName,
+                "skvproject@abv.bg",
+                "Reject Discount",
+                htmlContent);
         }
 
-        public void ApproveDiscount(string discountId, string userId)
+        public async Task ApproveDiscount(string discountId, string userId)
         {
             var discount = this.dbContext.Discounts.FirstOrDefault(x => x.Id == discountId);
 
@@ -105,6 +120,18 @@
             });
 
             this.dbContext.SaveChanges();
+
+            if (discount.ApproveCount == 2)
+            {
+                var htmlContent = $"<h1>Your discount with ID : {discountId} is approved!</h1>";
+
+                await this.emailSender.SendEmailAsync(
+                    GlobalConstants.SiteEmail,
+                    GlobalConstants.SystemName,
+                    "skvproject@abv.bg",
+                    "Approved Discount",
+                    htmlContent);
+            }
         }
     }
 }

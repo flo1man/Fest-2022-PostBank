@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\Data\SoftUniFest.Data\SoftUniFest.Data.csproj" />
     <ProjectReference Include="..\..\Web\SoftUniFest.Web.ViewModels\SoftUniFest.Web.ViewModels.csproj" />
     <ProjectReference Include="..\SoftUniFest.Services.Mapping\SoftUniFest.Services.Mapping.csproj" />
+    <ProjectReference Include="..\SoftUniFest.Services.Messaging\SoftUniFest.Services.Messaging.csproj" />
   </ItemGroup>
 
 </Project>
