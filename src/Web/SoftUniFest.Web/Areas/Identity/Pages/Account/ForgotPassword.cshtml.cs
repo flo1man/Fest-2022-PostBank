@@ -80,7 +80,7 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
                 sb.Append("<br>");
                 sb.Append("<p>If you did not request a new password, please let us know immediately by replying to this email.</p>");
 
-                await _emailSender.SendEmailAsync("skvproject@abv.bg", "SoftUni Fest",
+                await _emailSender.SendEmailAsync("stivan.kostadinov1@abv.bg", "SoftUni Fest",
                     Input.Email,
                     "Reset Password",
                     sb.ToString().Trim());

@@ -29,10 +29,8 @@ namespace SoftUniFest.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        [Required]
         public string CreditCardNumber { get; set; }
 
-        [Required]
         public string ExpiredOn { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }

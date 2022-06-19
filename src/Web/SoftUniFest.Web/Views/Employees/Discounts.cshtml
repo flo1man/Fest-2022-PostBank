@@ -1,5 +1,12 @@
 ﻿@using SoftUniFest.Data.Models.App
+@using SoftUniFest.Services
+@using SoftUniFest.Web.Infrastructure
+@inject IApproveEmployeeService ApproveEmployee
 @model SoftUniFest.Web.ViewModels.Discounts.EmployeeDiscountListViewModel
+
+@{
+    this.ViewData["Title"] = "Waiting to approve";
+}
 
 <table id="myTable" class="table table-hover table-striped">
     <thead>
@@ -10,7 +17,8 @@
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Status</th>
-            <th></th>
+            <th scope="col">Approve</th>
+            <th scope="col">Reject</th>
         </tr>
     </thead>
     <tbody>
@@ -23,8 +31,9 @@
                 <td>@item.Percentage</td>
                 <td>@item.StartDate</td>
                 <td>@item.EndDate</td>
-                <td>@item.Status.ToString()</td>
-                <td><a class="btn btn-primary">Approve</a></td>
+                <td>@item.Status.ToString() @if (@item.Status == StatusType.Active) {<text>(@item.ApproveCount / 2)</text>}</td>
+                <td><a class="btn btn-success @if (ApproveEmployee.IsApproved(item.Id, this.User.GetId())) { <text>disabled</text> }" asp-controller="Employees" asp-action="Approve" asp-route-discountId="@item.Id">Approve</a></td>
+                <td><a class="btn btn-danger @if (@item.Status == StatusType.Rejected) { <text>disabled</text> }" asp-controller="Employees" asp-action="Reject" asp-route-discountId="@item.Id">Reject</a></td>
             </tr>
         }
     </tbody>

@@ -56,7 +56,7 @@
         {
             var discounts = this.dbContext.Discounts
                 .Include(x => x.Trader)
-                .Where(x => x.Status == StatusType.Waiting)
+                .Where(x => x.ApproveCount == 1 || x.Status == StatusType.Waiting)
                 .ToList();
 
             var viewModel = new EmployeeDiscountListViewModel { Discounts = discounts };

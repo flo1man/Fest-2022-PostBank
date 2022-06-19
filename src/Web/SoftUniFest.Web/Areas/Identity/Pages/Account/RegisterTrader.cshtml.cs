@@ -65,16 +65,6 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
             [RegularExpression(@"^(\+359|0)\s?[89](\d{2}\s\d{3}\d{3}|[789]\d{7})$", ErrorMessage = "Invalid Phone Number. Format must start with +359 or 0")]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
-
-            [Required]
-            [RegularExpression(@"^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$", ErrorMessage = "Invalid Credit Card Number")]
-            [Display(Name = "Card Number")]
-            public string CreditCardNumber { get; set; }
-
-            [Required]
-            [RegularExpression(@"^(0[1-9]|1[0-2])\/([0-9]{4}|[0-9]{2})$", ErrorMessage = "Expire date is invalid. Format MM/YY")]
-            [Display(Name = "Expiry Date")]
-            public string ExpiredOn { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -91,7 +81,7 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
             {
                 var userName = "trader_" + Guid.NewGuid().ToString().Substring(0, 8);
                 var password = Guid.NewGuid().ToString() + "@S";
-                var user = new ApplicationUser { UserName = userName, Email = Input.Email, PhoneNumber = Input.PhoneNumber, CreditCardNumber = Input.CreditCardNumber, ExpiredOn = Input.ExpiredOn };
+                var user = new ApplicationUser { UserName = userName, Email = Input.Email, PhoneNumber = Input.PhoneNumber};
                 var result = await _userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {

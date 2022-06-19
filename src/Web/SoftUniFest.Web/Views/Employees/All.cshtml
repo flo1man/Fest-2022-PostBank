@@ -2,8 +2,11 @@
 @using SoftUniFest.Services
 @using SoftUniFest.Web.Infrastructure
 @inject IApproveEmployeeService ApproveEmployee
-@inject IApproveEmployeeService ApproveEmployee
 @model SoftUniFest.Web.ViewModels.Discounts.EmployeeDiscountListViewModel
+
+@{
+    this.ViewData["Title"] = "All Discounts";
+}
 
 <table id="myTable" class="table table-hover table-striped">
     <thead>

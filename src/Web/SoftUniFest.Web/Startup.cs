@@ -156,6 +156,7 @@
         {
             recurringJobManager.AddOrUpdate<ApplicationSync>("UsersSync", x => x.Work(), Cron.Minutely);
             Thread.Sleep(10);
+            recurringJobManager.AddOrUpdate<CardHolderSync>("CardHolderSync", x => x.Work(), Cron.Minutely);
             //recurringJobManager.AddOrUpdate<TraderSync>("TraderSync", x => x.Work(), Cron.Minutely);
             recurringJobManager.AddOrUpdate<EmployeeSync>("EmployeeSync", x => x.Work(), Cron.Minutely);
             recurringJobManager.AddOrUpdate<PosTerminalSync>("PosTerminalSync", x => x.Work(), Cron.Minutely);
