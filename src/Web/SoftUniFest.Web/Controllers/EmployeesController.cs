@@ -60,7 +60,7 @@
             var userId = this.userManager.GetUserId(this.User);
             await this.employeeService.RejectDiscount(discountId, userId);
 
-            return this.RedirectToAction(nameof(this.All));
+            return this.RedirectToAction(nameof(this.Discounts));
         }
 
         [HttpGet]
@@ -69,7 +69,7 @@
             var userId = this.userManager.GetUserId(this.User);
             await this.employeeService.ApproveDiscount(discountId, userId);
 
-            return this.RedirectToAction(nameof(this.All));
+            return this.RedirectToAction(nameof(this.Discounts));
         }
     }
 }

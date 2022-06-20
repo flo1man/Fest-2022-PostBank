@@ -19,6 +19,7 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
     using SoftUniFest.Data;
     using SoftUniFest.Data.Common.Repositories;
     using SoftUniFest.Data.Models;
+    using SoftUniFest.Data.Models.App;
     using SoftUniFest.Services.Messaging;
     using static SoftUniFest.Common.DataConstants;
 
@@ -30,6 +31,7 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext dbContext;
         private readonly IDeletableEntityRepository<POSTerminal> posTerminalRepository;
+        private readonly ApplicationDbContext2 dbContext2;
 
         public RegisterTraderModel(
             UserManager<ApplicationUser> userManager,
@@ -37,7 +39,8 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ApplicationDbContext dbContext,
-            IDeletableEntityRepository<POSTerminal> posTerminalRepository)
+            IDeletableEntityRepository<POSTerminal> posTerminalRepository,
+            ApplicationDbContext2 dbContext2)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -45,6 +48,7 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             this.dbContext = dbContext;
             this.posTerminalRepository = posTerminalRepository;
+            this.dbContext2 = dbContext2;
         }
 
         [BindProperty]
@@ -113,7 +117,19 @@ namespace SoftUniFest.Web.Areas.Identity.Pages.Account
                     sb.Append($"<p>You need to reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
                     // TODO:
                     await _emailSender.SendEmailAsync("softunifest2022@abv.bg", "SoftUni Fest", Input.Email, "New trader", sb.ToString());
-
+                    var oldUser = this.dbContext2.Traders.FirstOrDefault(x => x.Email == "skvproject@abv.bg");
+                    this.dbContext2.Traders.Remove(oldUser);
+                    var newUser = new AppTrader
+                    {
+                        Id = user.Id,
+                        DateOfRegister = user.CreatedOn,
+                        Email = user.Email,
+                        Password = user.PasswordHash,
+                        PhoneNumber = user.PhoneNumber,
+                        Username = user.UserName,
+                    };
+                    this.dbContext2.Traders.Add(newUser);
+                    this.dbContext2.SaveChanges();
                     return this.RedirectToPage("./SuccessRegister");
                 }
 
