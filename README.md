@@ -12,6 +12,7 @@ This project was devoloped during Softuni Fest 2022.
 * [Bootstrap](https://github.com/twbs/bootstrap)
 * [SendGrid API](https://sendgrid.com/)
 * [Hangfire](https://www.hangfire.io/)
+* [HTMLSanitizer](https://github.com/mganss/HtmlSanitizer)
 
 ## Credits
   
